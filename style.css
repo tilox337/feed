@@ -22,6 +22,7 @@ input {
 
 button {
   padding: 10px;
+  min-width: 4em;
   background: #007bff;
   color: white;
   border: none;
@@ -36,7 +37,7 @@ button:disabled {
 #list {
   background: white;
   border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .item {

@@ -6,12 +6,13 @@ let timeout;
 searchEl.addEventListener("input", () => {
   debounce(() => {
     document.querySelector("#list").innerHTML = "";
-    loadData(searchEl.value);
+    loadData(searchEl.value.toLowerCase().trim());
   }, 1000);
 });
 
 findButEl.addEventListener("click", () => {
-  loadData();
+  loadSimulation(searchEl.value.toLowerCase().trim());
+  //loadData(searchEl.value.toLowerCase().trim());
   findButEl.disabled = true;
   setTimeout(() => {
     findButEl.disabled = false;
@@ -30,33 +31,41 @@ function debounce(func, delay) {
   timeout = setTimeout(func, delay);
 }
 
-function loadData(filter = "") {
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
+async function loadData(filter = "") {
+  document.querySelector("#list").innerHTML = "";
+
+  const thisUrl = new URL(url);
+  thisUrl.searchParams.set("q", filter);
+  return await fetch(thisUrl).then((response) => response.json());
+  /*.then((data) => {
       data.forEach((element) => {
-        document.querySelector("#list").innerHTML += element.title;
+        document.querySelector("#list").innerHTML +=
+          `<h4>${element.title}</h4>`;
       });
       console.log(data);
-    });
+    });*/
 }
 
-function loadSimulation() {
+async function loadSimulation(filter = "") {
   let i = 0;
   let inter = setInterval(() => {
     i++;
-    searchEl.innerHTML = "";
+    findButEl.innerHTML = "";
     for (let j = 0; j < (i % 3) + 1; j++) {
-      searchEl.innerHTML += ".";
+      findButEl.innerHTML += ".";
     }
-  }, 100);
+  }, 200);
 
+  let returnData = await loadData(filter);
   setTimeout(() => {
-    //loadData();
-
     clearInterval(inter);
-    searchEl.innerHTML = "find";
-  }, 1000);
+    findButEl.innerHTML = "find";
+  }, 2000);
+  renderData(renderData);
+}
 
-  //clearInterval(inter);
+function renderData(datas) {
+  datas.forEach((element) => {
+    document.querySelector("#list").innerHTML += `<h4>${element.title}</h4>`;
+  });
 }
