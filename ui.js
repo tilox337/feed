@@ -1,9 +1,5 @@
-let url = new URL("https://jsonplaceholder.typicode.com/posts");
-let searchEl = document.querySelector("#search");
 let errEl = document.querySelector("#errorWin");
 let findButEl;
-let curentPage = 1;
-let lim = 5;
 
 searchEl.addEventListener("input", () => {
   debounce(() => {
@@ -15,50 +11,6 @@ searchEl.addEventListener("input", () => {
     }
   }, 1000);
 });
-
-createFindBut();
-loadSimulation();
-
-function createFindBut() {
-  document.querySelector("#findContaner").innerHTML = "";
-
-  findButEl = document.createElement("button");
-  document.querySelector("#findContaner").appendChild(findButEl);
-  findButEl.id = "findBut";
-  findButEl.innerHTML = "show more";
-
-  findButEl.addEventListener("click", () => {
-    curentPage++;
-    loadSimulation(searchEl.value.toLowerCase().trim());
-  });
-}
-//+
-async function sleep(time) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
-}
-let timeout;
-let oldRequest;
-function debounce(func, delay) {
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-  timeout = setTimeout(() => {
-    if (oldRequest !== searchEl.value.toLowerCase().trim()) {
-      func();
-      oldRequest = searchEl.value.toLowerCase().trim();
-    }
-  }, delay);
-}
-
-async function loadData(filter = "") {
-  const thisUrl = new URL(url);
-  thisUrl.searchParams.set("q", filter);
-  thisUrl.searchParams.set("_limit", lim);
-  thisUrl.searchParams.set("_page", curentPage);
-  return await fetch(thisUrl).then((response) => response.json());
-}
 
 async function loadSimulation(filter = "") {
   findButEl.disabled = true;
@@ -101,4 +53,22 @@ function renderData(data) {
     item.innerHTML += `<h4>${element.title}</h4>` + `<p>${element.body}</p>`;
   });
 }
-//-
+
+function createFindBut() {
+  document.querySelector("#findContaner").innerHTML = "";
+
+  findButEl = document.createElement("button");
+  document.querySelector("#findContaner").appendChild(findButEl);
+  findButEl.id = "findBut";
+  findButEl.innerHTML = "show more";
+
+  findButEl.addEventListener("click", () => {
+    curentPage++;
+    loadSimulation(searchEl.value.toLowerCase().trim());
+  });
+}
+
+createFindBut();
+loadSimulation();
+//loadData()
+//
