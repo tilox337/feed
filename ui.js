@@ -8,8 +8,9 @@ searchEl.addEventListener("input", () => {
     loadSimulation(searchEl.value.toLowerCase().trim());
     if (!document.querySelector("#findBut")) {
       createFindBut();
+      errEl.innerHTML = "";
     }
-  }, 1000);
+  }, 500);
 });
 
 async function loadSimulation(filter = "") {
@@ -25,6 +26,9 @@ async function loadSimulation(filter = "") {
   let returnData;
   try {
     returnData = await loadData(filter);
+    if (returnData.length === 0) {
+      document.querySelector("#errorWin").innerHTML = "nofithing found";
+    }
   } catch {
     errEl.innerHTML = "conection error";
     returnData = [];
@@ -39,7 +43,7 @@ async function loadSimulation(filter = "") {
       findButEl.innerHTML = "show more";
       findButEl.disabled = false;
     }
-  }, 2000);
+  }, 200);
 }
 
 function renderData(data) {
@@ -70,5 +74,3 @@ function createFindBut() {
 
 createFindBut();
 loadSimulation();
-//loadData()
-//
